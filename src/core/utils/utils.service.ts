@@ -6,6 +6,7 @@ import { TransactionUtil } from "./modules/transaction/transaction.service";
 import { HashUtil } from "./modules/hash/hash.service";
 import { CacheUtil } from "./modules/cache/cache.service";
 import { GeneratorUtil } from "./modules/generator/generator.service";
+import { NodemailerUtil } from "./modules/nodemailer/nodemailer.service";
 
 @Injectable()
 export class Utils implements IUtils {
@@ -14,6 +15,7 @@ export class Utils implements IUtils {
     readonly date: DateUtil,
     readonly hash: HashUtil,
     readonly generator: GeneratorUtil,
+    readonly nodemailer: NodemailerUtil,
     @Inject(ConnectionName.DB_PRIMARY) readonly transaction: TransactionUtil,
   ) {}
 }

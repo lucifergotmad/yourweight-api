@@ -13,6 +13,8 @@ export class EnvService {
   private readonly _jwtLimit: number;
   private readonly _mode: string;
   private readonly _secure: boolean;
+  private readonly _nodemailerPassword: string;
+  private readonly _nodemailerEmail: string;
 
   constructor(private readonly configService: ConfigService) {
     this._dbConnectionURI = this.configService.get<string>(EnvKey.DB_URI);
@@ -27,6 +29,12 @@ export class EnvService {
     this._dbPassword = this.configService.get<string>(EnvKey.DB_PASSWORD);
     this._jwtLimit = Number(
       this.configService.get<number>(EnvKey.JWT_LIMIT) || 1200,
+    );
+    this._nodemailerPassword = this.configService.get<string>(
+      EnvKey.NODEMAILER_PASSWORD,
+    );
+    this._nodemailerEmail = this.configService.get<string>(
+      EnvKey.NODEMAILER_EMAIL,
     );
   }
 
@@ -64,5 +72,13 @@ export class EnvService {
 
   get secure(): boolean {
     return this._secure;
+  }
+
+  get nodemailerPassword(): string {
+    return this._nodemailerPassword;
+  }
+
+  get nodemailerEmail(): string {
+    return this._nodemailerEmail;
   }
 }

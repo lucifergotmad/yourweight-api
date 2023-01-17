@@ -4,6 +4,7 @@ import { CacheUtil } from "./cache/cache.service";
 import { DateUtil } from "./date/date.service";
 import { GeneratorUtil } from "./generator/generator.service";
 import { HashUtil } from "./hash/hash.service";
+import { NodemailerUtil } from "./nodemailer/nodemailer.service";
 import { transactionProvider } from "./transaction/transaction.provider";
 
 @Module({
@@ -13,6 +14,7 @@ import { transactionProvider } from "./transaction/transaction.provider";
     DateUtil,
     HashUtil,
     GeneratorUtil,
+    NodemailerUtil,
     ...transactionProvider,
   ],
   exports: [
@@ -20,6 +22,7 @@ import { transactionProvider } from "./transaction/transaction.provider";
     DateUtil,
     HashUtil,
     GeneratorUtil,
+    NodemailerUtil,
     ...transactionProvider,
   ],
 })
