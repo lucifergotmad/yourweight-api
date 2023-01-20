@@ -18,6 +18,11 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         "Sorry, wrong credentials. Please check again",
       );
     }
+
+    if (!user?.is_confirmed) {
+      throw new UnauthorizedException("Please verify your email first!");
+    }
+
     return user;
   }
 }

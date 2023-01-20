@@ -14,6 +14,9 @@ export class UserMongoEntity extends BaseMongoEntity<typeof UserMongoEntity> {
   password: string;
 
   @Prop({ required: true })
+  confirmationCode: string;
+
+  @Prop({ required: true })
   weight: number;
 
   @Prop({ required: true })
@@ -23,7 +26,10 @@ export class UserMongoEntity extends BaseMongoEntity<typeof UserMongoEntity> {
   age: number;
 
   @Prop({ required: false })
-  targe?: number;
+  target?: number;
+
+  @Prop({ required: true, default: false })
+  is_confirmed: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserMongoEntity);

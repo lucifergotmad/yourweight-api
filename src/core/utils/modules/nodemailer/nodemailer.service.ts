@@ -14,7 +14,7 @@ export class NodemailerUtil implements INodemailerUtil {
 
   private _setupNodemailer() {
     this.transporter = nodemailer.createTransport({
-      host: "gmail",
+      host: "smtp.gmail.com",
       port: 465,
       secure: true,
       auth: {
@@ -33,20 +33,20 @@ export class NodemailerUtil implements INodemailerUtil {
       await this.transporter.sendMail({
         from: this.envService.nodemailerEmail,
         to: email,
-        subject: "Please confirm your account",
+        subject: "Please confirm your account!",
         html: `
             <div>
                 <h1>Email Confirmation</h1>
                 <h2>Hello, ${username}</h2>
                 <p>Please confirm your email by clicking on the following link</p>
-                <a href=http://localhost:8081/confirm/${confirmationCode}> Click here</a>
+                <a href=http://192.168.1.6:6969/api/v1/auth/confirm/${confirmationCode}> Click here</a>
             </div>
             `,
       });
 
       return "Send e-mail verification succeeded";
     } catch (error) {
-      return error;
+      throw new Error("Failed sending email verification!");
     }
   }
 }

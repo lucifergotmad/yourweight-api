@@ -11,6 +11,8 @@ export interface IUserProps extends IDetailUserProps {
   email: string;
   username: string;
   password: Password;
+  confirmationCode: string;
+  is_confirmed: boolean;
 }
 
 export interface UserFactoryProps extends Omit<IUserProps, "password"> {
@@ -29,10 +31,12 @@ export class UserEntity extends AggregateRoot<IUserProps> {
       email: props.email,
       username: props.username,
       password: password,
+      confirmationCode: props.confirmationCode,
       weight: props.weight,
       height: props.height,
       age: props.age,
       target: props?.target,
+      is_confirmed: props.is_confirmed,
     });
   }
 }

@@ -1,4 +1,12 @@
-import { Body, Controller, HttpCode, Post, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  UseGuards,
+} from "@nestjs/common";
 import {
   ApiConflictResponse,
   ApiCreatedResponse,
@@ -15,6 +23,7 @@ import { IdResponseDTO } from "src/interface-adapter/dtos/id.response.dto";
 import { AuthLoginResponseDTO } from "./dtos/auth-login.response.dto";
 import { HttpStatus } from "src/core/constants/error/status-code.const";
 import { AuthRefreshTokenRequestDTO } from "./dtos/auth-refresh-token.dto";
+import { ConfirmUserAccount } from "src/modules/user/use-cases/confirm-user-accout.use-case";
 
 @Controller("v1")
 @ApiTags("App Authentication")
@@ -22,6 +31,7 @@ export class AppController {
   constructor(
     private authService: AuthService,
     private createUser: RegisterUser,
+    private confirmUserAccount: ConfirmUserAccount,
   ) {}
 
   @Post("auth/register")
@@ -48,5 +58,10 @@ export class AppController {
   @Post("auth/token")
   async refreshToken(@Body() body: AuthRefreshTokenRequestDTO) {
     return await this.authService.refreshToken(body);
+  }
+
+  @Get("auth/confirm/:confirmationCode")
+  async confirmAccount(@Param("confirmationCode") confirmationCode: string) {
+    return await this.confirmUserAccount.execute(confirmationCode);
   }
 }

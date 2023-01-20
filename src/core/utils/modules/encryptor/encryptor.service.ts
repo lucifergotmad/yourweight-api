@@ -69,17 +69,17 @@ export class EncryptorUtil implements IEncryptorUtil {
     return true;
   }
 
-  _hexEncode(str: number) {
+  _hexEncode(str: any) {
     const result = str.toString(16);
     return result;
   }
 
-  _hexDecode(hex: string) {
+  _hexDecode(hex: any) {
     const result = parseInt(hex, 16);
     return result;
   }
 
-  _char(asci: number) {
+  _char(asci: any) {
     const result = String.fromCharCode(asci);
     return result;
   }

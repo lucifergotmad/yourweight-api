@@ -1,3 +1,3 @@
 export interface IGeneratorUtil {
-  generateJournalNumber(date: string): string;
+  generateRandomString(length: number): string;
 }

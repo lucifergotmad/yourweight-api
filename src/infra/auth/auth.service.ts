@@ -20,7 +20,10 @@ export class AuthService {
     private utils: Utils,
   ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(
+    username: string,
+    password: string,
+  ): Promise<Partial<UserMongoEntity> | null> {
     const user = await this.userRepository.findOne({
       $or: [{ username }, { email: username }],
     });

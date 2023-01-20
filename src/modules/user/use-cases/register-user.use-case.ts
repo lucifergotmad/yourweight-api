@@ -36,16 +36,26 @@ export class RegisterUser
           "Username or Email are already use",
         );
 
+        const confirmationCode = this.utils.generator.generateRandomString(16);
+
         const userEntity = await UserEntity.create({
+          confirmationCode,
           password: user.password,
           username: user.username,
           email: user.email,
           weight: user.weight,
           height: user.height,
           age: user.age,
+          is_confirmed: false,
         });
 
         result = await this.userRepository.save(userEntity);
+
+        await this.utils.nodemailer.sendVerificationEmail(
+          user.username,
+          user.email,
+          confirmationCode,
+        );
       });
 
       return new IdResponseDTO(result._id);
