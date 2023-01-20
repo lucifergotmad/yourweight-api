@@ -20,7 +20,9 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     }
 
     if (!user?.is_confirmed) {
-      throw new UnauthorizedException("Please verify your email first!");
+      throw new UnauthorizedException(
+        "Email not verified. Please check your email!",
+      );
     }
 
     return user;
