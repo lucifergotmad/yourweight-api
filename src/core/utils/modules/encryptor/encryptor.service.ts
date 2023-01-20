@@ -86,6 +86,8 @@ export class EncryptorUtil implements IEncryptorUtil {
 
   doEncrypt(dataBeforeCopy: any, ignore: string[] = []) {
     if (!this.isEnc) {
+      console.log("masuk");
+
       return dataBeforeCopy;
     }
 

@@ -16,7 +16,10 @@ import { ExceptionNotFound } from "src/core/exceptions/not-found.exception";
 import { ExceptionConflict } from "src/core/exceptions/conflict.exception";
 import { AdvancePartial } from "src/core/ports/interfaces/advance-partial.interface";
 import { TypeValidator } from "src/core/logic/type";
-import { Encryptor } from "src/services/encryptor.service";
+import { IEncryptorUtil } from "src/core/utils/modules/encryptor/encryptor.interface";
+import { EncryptorUtil } from "src/core/utils/modules/encryptor/encryptor.service";
+import { EnvService } from "src/infra/configs/env.service";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class BaseRepository<MongoEntity, Entity extends BaseEntityProps>
@@ -26,7 +29,9 @@ export class BaseRepository<MongoEntity, Entity extends BaseEntityProps>
     private readonly genericModel: Model<MongoEntity>,
     private readonly mapper: DbMapper<Entity, MongoEntity>,
     protected readonly ignore: string[] = [],
-    protected readonly encryptor: Encryptor = new Encryptor(),
+    protected readonly encryptor: IEncryptorUtil = new EncryptorUtil(
+      new EnvService(new ConfigService()),
+    ),
   ) {}
 
   async findAll(session?: ClientSession): Promise<Array<MongoEntity>> {

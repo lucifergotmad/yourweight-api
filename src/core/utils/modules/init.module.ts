@@ -2,6 +2,7 @@ import { CacheModule, Module } from "@nestjs/common";
 import { EnvModule } from "src/infra/configs/env.module";
 import { CacheUtil } from "./cache/cache.service";
 import { DateUtil } from "./date/date.service";
+import { EncryptorUtil } from "./encryptor/encryptor.service";
 import { GeneratorUtil } from "./generator/generator.service";
 import { HashUtil } from "./hash/hash.service";
 import { NodemailerUtil } from "./nodemailer/nodemailer.service";
@@ -15,6 +16,7 @@ import { transactionProvider } from "./transaction/transaction.provider";
     HashUtil,
     GeneratorUtil,
     NodemailerUtil,
+    EncryptorUtil,
     ...transactionProvider,
   ],
   exports: [
@@ -23,6 +25,7 @@ import { transactionProvider } from "./transaction/transaction.provider";
     HashUtil,
     GeneratorUtil,
     NodemailerUtil,
+    EncryptorUtil,
     ...transactionProvider,
   ],
 })
