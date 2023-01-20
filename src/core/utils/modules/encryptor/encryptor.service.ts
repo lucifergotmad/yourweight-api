@@ -1,14 +1,15 @@
 import { Injectable } from "@nestjs/common";
+import { EnvService } from "src/infra/configs/env.service";
 import { IEncryptorUtil } from "./encryptor.interface";
 
 @Injectable()
-export class Encryptor implements IEncryptorUtil {
+export class EncryptorUtil implements IEncryptorUtil {
   private encKey: string;
   private isEnc: boolean;
 
-  constructor(_encKey: string, _isEnc: boolean) {
-    this.encKey = _encKey;
-    this.isEnc = _isEnc;
+  constructor(private envService: EnvService) {
+    this.encKey = this.envService.encKey;
+    this.isEnc = this.envService.isEnc;
   }
 
   _encryptASCII(text: any) {

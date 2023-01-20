@@ -15,6 +15,8 @@ export class EnvService {
   private readonly _secure: boolean;
   private readonly _nodemailerPassword: string;
   private readonly _nodemailerEmail: string;
+  private readonly _encKey: string;
+  private readonly _isEnc: boolean;
 
   constructor(private readonly configService: ConfigService) {
     this._dbConnectionURI = this.configService.get<string>(EnvKey.DB_URI);
@@ -36,6 +38,8 @@ export class EnvService {
     this._nodemailerEmail = this.configService.get<string>(
       EnvKey.NODEMAILER_EMAIL,
     );
+    this._encKey = this.configService.get<string>(EnvKey.ENCKEY);
+    this._isEnc = Boolean(this.configService.get<number>(EnvKey.ENCMODE));
   }
 
   get dbConnectionURI(): string {
@@ -80,5 +84,13 @@ export class EnvService {
 
   get nodemailerEmail(): string {
     return this._nodemailerEmail;
+  }
+
+  get encKey(): string {
+    return this._encKey;
+  }
+
+  get isEnc(): boolean {
+    return this._isEnc;
   }
 }
