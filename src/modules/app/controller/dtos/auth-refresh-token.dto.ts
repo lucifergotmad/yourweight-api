@@ -2,9 +2,6 @@ import { IsOptionalString } from "src/core/decorators/dto-decorators/optional-st
 import { IsRequiredString } from "src/core/decorators/dto-decorators/required-string.decorator";
 
 export class AuthRefreshTokenRequestDTO {
-  @IsOptionalString({ example: "lucifergotmad@gmail.com" })
-  email: string;
-
   @IsOptionalString({ example: "lucifer" })
   username: string;
 
