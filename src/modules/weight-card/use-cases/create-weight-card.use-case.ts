@@ -39,18 +39,19 @@ export class CreateWeightCard
           "Username not found!",
         );
 
-        // const closestWeight = user?.target
-        //   ? Math.abs(user?.target - user.weight) >
-        //     Math.abs(user?.target - body.weight)
-        //     ? body.weight
-        //     : user.weight
-        //   : user.weight;
-
-        // responseMessage =
-        // body.weight !== user.target ? :
-        //   closestWeight > body.weight
-        //     ? `Keep Fighting ${user.username}! u got this :)`
-        //     : `Congrats ${user.username}, u did it :)`;
+        if (!user.target) {
+          if (user.weight < body.weight) {
+            responseMessage = "Oops, you're getting fat";
+          } else {
+            responseMessage = "Congrats, you got this!";
+          }
+        } else {
+          if (user.target !== body.weight) {
+            responseMessage = "Keep Going, you got this!";
+          } else {
+            responseMessage = "Congrats, you did it!";
+          }
+        }
 
         const weightCardEntity = WeightCardEntity.create({
           username,
