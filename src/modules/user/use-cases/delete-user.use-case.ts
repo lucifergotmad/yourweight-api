@@ -33,7 +33,7 @@ export class DeleteUser
     } catch (err) {
       throw new ResponseException(err.message, err.status, err.trace);
     } finally {
-      await session.endSession();
+      session.endSession();
     }
   }
 }

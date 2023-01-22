@@ -36,6 +36,8 @@ export class UpdateUser
       return new MessageResponseDTO(`${result.n} documents updated`);
     } catch (err) {
       throw new ResponseException(err.message, err.status, err.trace);
+    } finally {
+      session.endSession();
     }
   }
 }

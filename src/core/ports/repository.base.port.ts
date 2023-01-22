@@ -6,7 +6,7 @@ import { IRepositoryResponse } from "./interfaces/repository-response.interface"
 
 export interface BaseRepositoryPort<
   MongoEntity,
-  Entity extends BaseEntityProps
+  Entity extends BaseEntityProps,
 > {
   findAll(session?: ClientSession): Promise<Array<MongoEntity>>;
   findOne(

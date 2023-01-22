@@ -32,6 +32,8 @@ export class ConfirmUserAccount
       return new MessageResponseDTO("Account Confirmed!");
     } catch (error) {
       throw new ResponseException(error.message, error.status, error.trace);
+    } finally {
+      session.endSession();
     }
   }
 }

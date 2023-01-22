@@ -9,6 +9,9 @@ import { UserEntity } from "../domain/user.entity";
 import { IUseCase } from "src/core/base-classes/interfaces/use-case.interface";
 import { ResponseException } from "src/core/exceptions/response.http-exception";
 import { IRepositoryResponse } from "src/core/ports/interfaces/repository-response.interface";
+import { WeightEntity } from "src/modules/weight/domain/weight.entity";
+import { InjectWeightRepository } from "src/modules/weight/database/weight.repository.provider";
+import { WeightRepositoryPort } from "src/modules/weight/database/weight.repository.port";
 
 @Injectable()
 export class RegisterUser
@@ -16,7 +19,9 @@ export class RegisterUser
   implements IUseCase<AuthRegisterRequestDTO, IdResponseDTO>
 {
   constructor(
-    @InjectUserRepository private userRepository: UserRepositoryPort,
+    @InjectUserRepository private readonly userRepository: UserRepositoryPort,
+    @InjectWeightRepository
+    private readonly weightRepository: WeightRepositoryPort,
     private readonly utils: Utils,
   ) {
     super();
@@ -43,13 +48,19 @@ export class RegisterUser
           password: user.password,
           username: user.username,
           email: user.email,
-          weight: user.weight,
-          height: user.height,
-          age: user.age,
           is_confirmed: false,
         });
 
-        result = await this.userRepository.save(userEntity);
+        result = await this.userRepository.save(userEntity, session);
+
+        const weightEntity = WeightEntity.create({
+          username: user.username,
+          weight: user.weight,
+          height: user.height,
+          age: user.height,
+        });
+
+        await this.weightRepository.save(weightEntity, session);
 
         await this.utils.nodemailer.sendVerificationEmail(
           user.username,
@@ -62,7 +73,7 @@ export class RegisterUser
     } catch (err) {
       throw new ResponseException(err.message, err.status, err.trace);
     } finally {
-      await session.endSession();
+      session.endSession();
     }
   }
 }

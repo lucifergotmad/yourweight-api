@@ -1,13 +1,7 @@
 import { AggregateRoot } from "src/core/base-classes/domain/aggregate-root";
 import { Password } from "./value-objects/password.value-object";
 
-export interface IDetailUserProps {
-  weight: number;
-  height: number;
-  age: number;
-  target?: number;
-}
-export interface IUserProps extends IDetailUserProps {
+export interface IUserProps {
   email: string;
   username: string;
   password: Password;
@@ -28,15 +22,8 @@ export class UserEntity extends AggregateRoot<IUserProps> {
     const password = await Password.create(props.password);
 
     return new UserEntity({
-      email: props.email,
-      username: props.username,
-      password: password,
-      confirmationCode: props.confirmationCode,
-      weight: props.weight,
-      height: props.height,
-      age: props.age,
-      target: props?.target,
-      is_confirmed: props.is_confirmed,
+      ...props,
+      password,
     });
   }
 }

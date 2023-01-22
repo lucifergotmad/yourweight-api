@@ -1,0 +1,78 @@
+import { Injectable } from "@nestjs/common";
+import { BaseUseCase } from "src/core/base-classes/infra/use-case.base";
+import { IUseCase } from "src/core/base-classes/interfaces/use-case.interface";
+import { ResponseException } from "src/core/exceptions/response.http-exception";
+import { Utils } from "src/core/utils/utils.service";
+import { MessageResponseDTO } from "src/interface-adapter/dtos/message.response.dto";
+import { CreateWeightCardRequestDTO } from "src/modules/weight/controller/dtos/create-weight-card.request.dto";
+import { WeightRepositoryPort } from "src/modules/weight/database/weight.repository.port";
+import { InjectWeightRepository } from "src/modules/weight/database/weight.repository.provider";
+import { WeightCardRepositoryPort } from "../database/weight-card.repository.port";
+import { InjectWeightCardRepository } from "../database/weight-card.repository.provider";
+import { WeightCardEntity } from "../domain/weight-card.entity";
+
+@Injectable()
+export class CreateWeightCard
+  extends BaseUseCase
+  implements IUseCase<string & CreateWeightCardRequestDTO, MessageResponseDTO>
+{
+  constructor(
+    @InjectWeightCardRepository
+    private readonly weightCardRepository: WeightCardRepositoryPort,
+    @InjectWeightRepository
+    private readonly weightRepository: WeightRepositoryPort,
+    private readonly utils: Utils,
+  ) {
+    super();
+  }
+
+  public async execute(
+    username: string,
+    body?: CreateWeightCardRequestDTO,
+  ): Promise<MessageResponseDTO> {
+    const session = await this.utils.transaction.startTransaction();
+    let responseMessage: string;
+    try {
+      await session.withTransaction(async () => {
+        const user = await this.weightRepository.findOneOrThrow(
+          { username },
+          "Username not found!",
+        );
+
+        // const closestWeight = user?.target
+        //   ? Math.abs(user?.target - user.weight) >
+        //     Math.abs(user?.target - body.weight)
+        //     ? body.weight
+        //     : user.weight
+        //   : user.weight;
+
+        // responseMessage =
+        // body.weight !== user.target ? :
+        //   closestWeight > body.weight
+        //     ? `Keep Fighting ${user.username}! u got this :)`
+        //     : `Congrats ${user.username}, u did it :)`;
+
+        const weightCardEntity = WeightCardEntity.create({
+          username,
+          date: new Date(),
+          weight: body.weight,
+          photo: body?.photo,
+          comment: body?.comment,
+        });
+
+        await this.weightCardRepository.save(weightCardEntity, session);
+
+        await this.weightRepository.update(
+          { username },
+          { weight: body.weight },
+          session,
+        );
+      });
+      return new MessageResponseDTO(responseMessage);
+    } catch (error) {
+      throw new ResponseException(error.message, error.status, error.trace);
+    } finally {
+      session.endSession();
+    }
+  }
+}

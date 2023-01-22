@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 import { BaseMongoEntity } from "src/core/base-classes/infra/mongo-entity.base";
 
-@Schema({ collection: "tm_users" })
+@Schema({ collection: "users" })
 export class UserMongoEntity extends BaseMongoEntity<typeof UserMongoEntity> {
   @Prop({ required: true, unique: true })
   email: string;
@@ -15,18 +15,6 @@ export class UserMongoEntity extends BaseMongoEntity<typeof UserMongoEntity> {
 
   @Prop({ required: true })
   confirmationCode: string;
-
-  @Prop({ required: true })
-  weight: number;
-
-  @Prop({ required: true })
-  height: number;
-
-  @Prop({ required: true })
-  age: number;
-
-  @Prop({ required: false })
-  target?: number;
 
   @Prop({ required: true, default: false })
   is_confirmed: boolean;
