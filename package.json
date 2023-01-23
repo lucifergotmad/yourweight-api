@@ -29,6 +29,7 @@
     "@nestjs/mongoose": "^7.2.4",
     "@nestjs/passport": "^8.0.0",
     "@nestjs/platform-express": "^7.6.15",
+    "@nestjs/serve-static": "^3.0.0",
     "@nestjs/swagger": "^4.8.1",
     "@nestjs/throttler": "^2.0.1",
     "@types/nodemailer": "^6.4.7",
