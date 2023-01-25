@@ -39,7 +39,7 @@ export class NodemailerUtil implements INodemailerUtil {
                 <h1>Email Confirmation</h1>
                 <h2>Hello, ${username}</h2>
                 <p>Please confirm your email by clicking on the following link</p>
-                <a href=http://192.168.1.6:6969/api/v1/auth/confirm/${confirmationCode}> Click here</a>
+                <a href=${this.envService.baseUrl}/api/v1/auth/confirm/${confirmationCode}> Click here</a>
             </div>
             `,
       });

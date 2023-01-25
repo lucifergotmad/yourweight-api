@@ -18,6 +18,7 @@ async function bootstrap() {
     cors: true,
     ...secureOptions,
   });
+
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.setGlobalPrefix("api");
 

@@ -1,4 +1,5 @@
 export const EnvKey = Object.freeze({
+  BASE_URL: "BASE_APP_URL",
   DB_URI: "DATABASE_CONNECTION_URI",
   DB_NAME: "DATABASE_NAME",
   DB_USERNAME: "DATABASE_USERNAME",
