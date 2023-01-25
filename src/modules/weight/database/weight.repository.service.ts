@@ -6,6 +6,7 @@ import { WeightMongoEntity } from "./model/weight.mongo-entity";
 import { WeightEntity } from "../domain/weight.entity";
 import { WeightRepositoryPort } from "./weight.repository.port";
 import { WeightMongoMapper } from "./model/weight.mongo-mapper";
+import { WeightIgnore } from "src/core/constants/encryption/encryption-ignore";
 
 @Injectable()
 export class WeightRepository
@@ -16,7 +17,11 @@ export class WeightRepository
     @InjectModel(WeightMongoEntity.name)
     private weightModel: Model<WeightMongoEntity>,
   ) {
-    super(weightModel, new WeightMongoMapper(WeightEntity, WeightMongoEntity));
+    super(
+      weightModel,
+      new WeightMongoMapper(WeightEntity, WeightMongoEntity),
+      WeightIgnore,
+    );
   }
 
   // fill me with beautiful method!
