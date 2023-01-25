@@ -7,18 +7,12 @@ import { JwtModule } from "@nestjs/jwt";
 import { EnvService } from "../configs/env.service";
 import { EnvModule } from "../configs/env.module";
 import { JwtStrategy } from "./jwt.strategy";
-import { ServeStaticModule } from "@nestjs/serve-static";
-import { join } from "path";
 
 @Module({
   imports: [
     UserRepositoryModule,
     PassportModule,
     EnvModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, "..", "client"),
-      exclude: ["/api*"],
-    }),
     JwtModule.registerAsync({
       imports: [EnvModule],
       useFactory: (envService: EnvService) => ({
