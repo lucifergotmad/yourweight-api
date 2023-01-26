@@ -14,7 +14,7 @@ import { WeightCardEntity } from "../domain/weight-card.entity";
 @Injectable()
 export class CreateWeightCard
   extends BaseUseCase
-  implements IUseCase<string & CreateWeightCardRequestDTO, MessageResponseDTO>
+  implements IUseCase<CreateWeightCardRequestDTO, MessageResponseDTO>
 {
   constructor(
     @InjectWeightCardRepository
@@ -27,7 +27,6 @@ export class CreateWeightCard
   }
 
   public async execute(
-    username: string,
     body?: CreateWeightCardRequestDTO,
   ): Promise<MessageResponseDTO> {
     const session = await this.utils.transaction.startTransaction();
@@ -35,13 +34,13 @@ export class CreateWeightCard
     try {
       await session.withTransaction(async () => {
         const user = await this.weightRepository.findOneOrThrow(
-          { username },
+          { username: this.user.username },
           "Username not found!",
         );
 
         if (!user.target) {
           if (user.weight < body.weight) {
-            responseMessage = "Oops, you're getting fat";
+            responseMessage = "Oopss, you're getting fat";
           } else {
             responseMessage = "Congrats, you got this!";
           }
@@ -54,7 +53,7 @@ export class CreateWeightCard
         }
 
         const weightCardEntity = WeightCardEntity.create({
-          username,
+          username: this.user.username,
           date: new Date(),
           weight: body.weight,
           photo: body?.photo,
@@ -64,7 +63,7 @@ export class CreateWeightCard
         await this.weightCardRepository.save(weightCardEntity, session);
 
         await this.weightRepository.update(
-          { username },
+          { username: this.user.username },
           { weight: body.weight },
           session,
         );

@@ -15,6 +15,7 @@ export class UserReponseDTO extends IdResponseDTO implements IUserResponse {
     super(props._id);
     this.username = props.username;
   }
+
   @ApiProperty({ example: "lucifer" })
   username: string;
 }
