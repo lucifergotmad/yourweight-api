@@ -11,8 +11,12 @@ export class WeightResponseDTO implements IWeightResponse {
    */
   constructor(props: IWeightResponse) {
     this.weight = props.weight;
+    this.target = props.target;
   }
 
   @ApiProperty({ example: 77 })
   weight: number;
+
+  @ApiProperty({ example: 80 })
+  target: number;
 }

@@ -20,11 +20,11 @@ export class FindWeightByUsername
 
   public async execute(): Promise<WeightResponseDTO> {
     try {
-      const { weight } = await this.weightRepository.findOneLatest({
+      const { weight, target = 0 } = await this.weightRepository.findOneLatest({
         username: this.user.username,
       });
 
-      return new WeightResponseDTO({ weight });
+      return new WeightResponseDTO({ weight, target });
     } catch (error) {
       throw new ResponseException(error.message, error.status, error.trace);
     }
