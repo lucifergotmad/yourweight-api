@@ -11,6 +11,7 @@ import { MessageResponseDTO } from "src/interface-adapter/dtos/message.response.
 import { DeleteUser } from "src/modules/user/use-cases/delete-user.use-case";
 import { UpdateUser } from "src/modules/user/use-cases/update-user.use-case";
 import { UserMongoEntity } from "../database/model/user.mongo-entity";
+import { InjectUserRepository } from "../database/user.repository.provider";
 import { UserRepository } from "../database/user.repository.service";
 import { FindUserById } from "../use-cases/find-user-by-id.use-case";
 import { CreateUserRequestDTO } from "./dtos/create-user.request.dto";
@@ -23,6 +24,7 @@ export class UsersController {
     private readonly deleteUser: DeleteUser,
     private readonly updateUser: UpdateUser,
     private readonly findUserById: FindUserById,
+    @InjectUserRepository
     private readonly userRepository: UserRepository,
   ) {}
 

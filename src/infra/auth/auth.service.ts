@@ -10,14 +10,16 @@ import { AuthRefreshTokenRequestDTO } from "src/modules/app/controller/dtos/auth
 import { ExceptionUnauthorize } from "src/core/exceptions/unauthorize.exception";
 import { ResponseException } from "src/core/exceptions/response.http-exception";
 import { AuthLoginRequestDTO } from "src/modules/app/controller/dtos/auth-login.dto";
+import { InjectUserRepository } from "src/modules/user/database/user.repository.provider";
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userRepository: UserRepository,
-    private jwtService: JwtService,
-    private envService: EnvService,
-    private utils: Utils,
+    @InjectUserRepository
+    private readonly userRepository: UserRepository,
+    private readonly jwtService: JwtService,
+    private readonly envService: EnvService,
+    private readonly utils: Utils,
   ) {}
 
   async validateUser(
