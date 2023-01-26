@@ -11,7 +11,9 @@ import { AuthUser } from "src/core/decorators/controller-decorators/param-decora
 import { MessageResponseDTO } from "src/interface-adapter/dtos/message.response.dto";
 import { UserMongoEntity } from "src/modules/user/database/model/user.mongo-entity";
 import { CreateWeightCard } from "src/modules/weight-card/use-cases/create-weight-card.use-case";
+import { CalculateUserBMI } from "../use-cases/calculate-user-bmi.use-case";
 import { FindWeightByUsername } from "../use-cases/find-weight-by-username.use-case";
+import { BMIResponseDTO } from "./dtos/bmi.response.dto";
 import { CreateWeightCardRequestDTO } from "./dtos/create-weight-card.request.dto";
 import { WeightResponseDTO } from "./dtos/weight.response.dto";
 
@@ -20,6 +22,7 @@ export class WeightController {
   constructor(
     private readonly createWeightCard: CreateWeightCard,
     private readonly findWeightByUsername: FindWeightByUsername,
+    private readonly calculateUserBMI: CalculateUserBMI,
   ) {}
 
   @SecurePost()
@@ -36,5 +39,11 @@ export class WeightController {
   @ApiOkResponse({ type: WeightResponseDTO })
   findOne(@AuthUser() user: Partial<UserMongoEntity>) {
     return this.findWeightByUsername.injectDecodedToken(user).execute();
+  }
+
+  @SecureGet("bmi")
+  @ApiOkResponse({ type: BMIResponseDTO })
+  findOneBMI(@AuthUser() user: Partial<UserMongoEntity>) {
+    return this.calculateUserBMI.injectDecodedToken(user).execute();
   }
 }
