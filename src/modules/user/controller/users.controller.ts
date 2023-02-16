@@ -1,5 +1,6 @@
-import { Body, Get, Param } from "@nestjs/common";
+import { Body, Get, Param, Query } from "@nestjs/common";
 import { ApiBadRequestResponse, ApiOkResponse } from "@nestjs/swagger";
+import { APIQueryProperty } from "src/core/decorators/controller-decorators/class-decorators/api-query-property.decorator";
 import { ControllerProperty } from "src/core/decorators/controller-decorators/class-decorators/controller-property.decorator";
 import { SecureDelete } from "src/core/decorators/controller-decorators/class-decorators/secure-delete.decorator";
 import { SecureGet } from "src/core/decorators/controller-decorators/class-decorators/secure-get.decorator";
@@ -10,7 +11,9 @@ import { UpdateUser } from "src/modules/user/use-cases/update-user.use-case";
 import { UserMongoEntity } from "../database/model/user.mongo-entity";
 import { InjectUserRepository } from "../database/user.repository.provider";
 import { UserRepository } from "../database/user.repository.service";
+import { CheckUsername } from "../use-cases/check-username.use-case";
 import { FindUserById } from "../use-cases/find-user-by-id.use-case";
+import { CheckUsernameRequestDTO } from "./dtos/check-username.request.dto";
 import { UpdateUserRequestDTO } from "./dtos/update-user.request.dto";
 import { UserReponseDTO } from "./dtos/user.reponse.dto";
 
@@ -20,6 +23,7 @@ export class UsersController {
     private readonly deleteUser: DeleteUser,
     private readonly updateUser: UpdateUser,
     private readonly findUserById: FindUserById,
+    private readonly checkUsername: CheckUsername,
     @InjectUserRepository
     private readonly userRepository: UserRepository,
   ) {}
@@ -30,6 +34,12 @@ export class UsersController {
     return (await this.userRepository.findAll()).map(
       (user: UserMongoEntity) => new UserReponseDTO(user),
     );
+  }
+
+  @Get("check/:username")
+  @ApiOkResponse({ type: MessageResponseDTO })
+  checkHandler(@Param() param: CheckUsernameRequestDTO) {
+    return this.checkUsername.execute(param);
   }
 
   @SecureGet(":_id")
