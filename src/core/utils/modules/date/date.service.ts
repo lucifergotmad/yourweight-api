@@ -23,4 +23,25 @@ export class DateUtil implements IDateUtil {
   getToday(): string {
     return moment().format("YYYY-MM-DD");
   }
+
+  startOf(
+    unitOfTime: moment.unitOfTime.StartOf,
+    format: string,
+    date?: Date | string,
+  ) {
+    const tanggal = date ? new Date(date) : new Date();
+    return moment
+      .tz(tanggal, "Asia/Jakarta")
+      .startOf(unitOfTime)
+      .format(format);
+  }
+
+  endOf(
+    unitOfTime: moment.unitOfTime.StartOf,
+    format: string,
+    date?: Date | string,
+  ) {
+    const tanggal = date ? new Date(date) : new Date();
+    return moment.tz(tanggal, "Asia/Jakarta").endOf(unitOfTime).format(format);
+  }
 }

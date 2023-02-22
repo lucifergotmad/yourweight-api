@@ -6,6 +6,8 @@ import { WeightCardMongoEntity } from "./model/weight-card.mongo-entity";
 import { WeightCardEntity } from "../domain/weight-card.entity";
 import { WeightCardRepositoryPort } from "./weight-card.repository.port";
 import { WeightCardMongoMapper } from "./model/weight-card.mongo-mapper";
+import { WeightCardIgnore } from "src/core/constants/encryption/encryption-ignore";
+import { IWeightChartResponse } from "src/interface-adapter/interfaces/weight/weight-chart.interface";
 
 @Injectable()
 export class WeightCardRepository
@@ -19,11 +21,59 @@ export class WeightCardRepository
     super(
       weightCardModel,
       new WeightCardMongoMapper(WeightCardEntity, WeightCardMongoEntity),
+      WeightCardIgnore,
     );
   }
 
-  // fill me with beautiful method!
-  __init__(): void {
-    //replace this lonely method!
+  async getWeightChart(
+    username: string,
+    start_date: string,
+    end_date: string,
+  ): Promise<IWeightChartResponse[]> {
+    const results = await this.weightCardModel.aggregate([
+      {
+        $match: {
+          username,
+        },
+      },
+      {
+        $project: {
+          date_array: { $split: [{ $toString: "$date" }, "T"] },
+          weight: "$weight",
+        },
+      },
+      {
+        $addFields: {
+          splitted_date: {
+            $arrayElemAt: ["$date_array", 0],
+          },
+        },
+      },
+      {
+        $match: {
+          splitted_date: {
+            $gte: start_date,
+            $lte: end_date,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$splitted_date",
+          weight: {
+            $last: "$weight",
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          label: "$_id",
+          weight: "$weight",
+        },
+      },
+    ]);
+
+    return this.encryptor.doDecrypt(results, WeightCardIgnore);
   }
 }

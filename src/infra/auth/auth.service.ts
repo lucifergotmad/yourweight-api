@@ -53,6 +53,7 @@ export class AuthService {
       const { access_token, refresh_token } = await this.registerToken(user);
 
       return new AuthLoginResponseDTO({
+        _id: user._id,
         accessToken: access_token,
         refreshToken: refresh_token,
         username: user.username,

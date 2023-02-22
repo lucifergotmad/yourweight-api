@@ -9,6 +9,7 @@ export class WeightResponseDTO implements IWeightResponse {
    * this will avoid data leak, and preventing return a whole bunch
    * of data to client.
    */
+
   constructor(props: IWeightResponse) {
     this.weight = props.weight;
     this.target = props.target;
