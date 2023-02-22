@@ -37,8 +37,8 @@ export class AppController {
   @Post("auth/register")
   @ApiCreatedResponse({ type: IdResponseDTO })
   @ApiConflictResponse({ description: "Data already exists" })
-  async register(@Body() body: AuthRegisterRequestDTO) {
-    return await this.createUser.execute(body);
+  register(@Body() body: AuthRegisterRequestDTO) {
+    return this.createUser.execute(body);
   }
 
   @UseGuards(LocalAuthGuard)
@@ -61,7 +61,7 @@ export class AppController {
   }
 
   @Get("auth/confirm/:confirmationCode")
-  async confirmAccount(@Param("confirmationCode") confirmationCode: string) {
-    return await this.confirmUserAccount.execute(confirmationCode);
+  confirmAccount(@Param("confirmationCode") confirmationCode: string) {
+    return this.confirmUserAccount.execute(confirmationCode);
   }
 }
