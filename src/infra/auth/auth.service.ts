@@ -73,9 +73,16 @@ export class AuthService {
     const payload = { sub: user.username };
     const token = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: 86400,
+      expiresIn: this.envService.jwtLimit,
       secret: this.envService.jwtRefreshKey,
     });
+
+    await this.utils.cache.set(user.username, true);
+    await this.utils.cache.set(
+      refreshToken,
+      user.username,
+      this.envService.jwtLimit,
+    );
 
     return { access_token: token, refresh_token: refreshToken };
   }
