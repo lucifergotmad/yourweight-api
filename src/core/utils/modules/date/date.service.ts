@@ -16,12 +16,37 @@ export class DateUtil implements IDateUtil {
     return moment.tz(date, "Asia/Jakarta").format("YYYY");
   }
 
-  formatDate(date: Date, dateFormat: string): string {
-    return moment.tz(date, "Asia/Jakarta").format(dateFormat);
+  formatDate(date: Date | string, dateFormat: string): string {
+    const tanggal = new Date(date);
+    return moment.tz(tanggal, "Asia/Jakarta").format(dateFormat);
   }
 
   getToday(): string {
     return moment().format("YYYY-MM-DD");
+  }
+
+  incrementDate(
+    amount: number,
+    unitOfTime: moment.unitOfTime.DurationConstructor,
+    date?: Date | string,
+  ): string {
+    const tanggal = date ? new Date(date) : new Date();
+    return moment
+      .tz(tanggal, "Asia/Jakarta")
+      .add(amount, unitOfTime)
+      .format("YYYY-MM-DD");
+  }
+
+  decrementDate(
+    amount: number,
+    unitOfTime: moment.unitOfTime.DurationConstructor,
+    date?: Date | string,
+  ): string {
+    const tanggal = date ? new Date(date) : new Date();
+    return moment
+      .tz(tanggal, "Asia/Jakarta")
+      .subtract(amount, unitOfTime)
+      .format("YYYY-MM-DD");
   }
 
   startOf(

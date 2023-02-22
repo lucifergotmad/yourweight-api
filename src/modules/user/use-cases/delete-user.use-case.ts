@@ -6,6 +6,10 @@ import { IRepositoryResponse } from "src/core/ports/interfaces/repository-respon
 import { Utils } from "src/core/utils/utils.service";
 import { MessageResponseDTO } from "src/interface-adapter/dtos/message.response.dto";
 import { IMessage } from "src/interface-adapter/interfaces/message.interface";
+import { WeightCardRepositoryPort } from "src/modules/weight-card/database/weight-card.repository.port";
+import { InjectWeightCardRepository } from "src/modules/weight-card/database/weight-card.repository.provider";
+import { WeightRepositoryPort } from "src/modules/weight/database/weight.repository.port";
+import { InjectWeightRepository } from "src/modules/weight/database/weight.repository.provider";
 import { UserRepositoryPort } from "../database/user.repository.port";
 import { InjectUserRepository } from "../database/user.repository.provider";
 
@@ -15,18 +19,33 @@ export class DeleteUser
   implements IUseCase<string, IMessage>
 {
   constructor(
-    @InjectUserRepository private userRepository: UserRepositoryPort,
+    @InjectUserRepository private readonly userRepository: UserRepositoryPort,
+    @InjectWeightRepository
+    private readonly weightRepository: WeightRepositoryPort,
+    @InjectWeightCardRepository
+    private readonly weightCardRepository: WeightCardRepositoryPort,
     private readonly utils: Utils,
   ) {
     super();
   }
 
-  public async execute(id: string): Promise<IMessage> {
+  public async execute(_id: string): Promise<IMessage> {
     const session = await this.utils.transaction.startTransaction();
     let result: IRepositoryResponse;
     try {
       await session.withTransaction(async () => {
-        result = await this.userRepository.delete({ _id: id });
+        const user = await this.userRepository.findById(_id, session);
+
+        await this.weightRepository.delete(
+          { username: user.username },
+          session,
+        );
+        await this.weightCardRepository.delete(
+          { username: user.username },
+          session,
+        );
+
+        result = await this.userRepository.delete({ _id }, session);
       });
 
       return new MessageResponseDTO(`${result.n} documents deleted!`);

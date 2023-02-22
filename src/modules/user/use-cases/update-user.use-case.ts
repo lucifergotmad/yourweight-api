@@ -6,8 +6,9 @@ import { IRepositoryResponse } from "src/core/ports/interfaces/repository-respon
 import { Utils } from "src/core/utils/utils.service";
 import { MessageResponseDTO } from "src/interface-adapter/dtos/message.response.dto";
 import { IId } from "src/interface-adapter/interfaces/id.interface";
+import { WeightRepositoryPort } from "src/modules/weight/database/weight.repository.port";
+import { InjectWeightRepository } from "src/modules/weight/database/weight.repository.provider";
 import { UpdateUserRequestDTO } from "../controller/dtos/update-user.request.dto";
-import { UserMongoEntity } from "../database/model/user.mongo-entity";
 import { UserRepositoryPort } from "../database/user.repository.port";
 import { InjectUserRepository } from "../database/user.repository.provider";
 
@@ -17,7 +18,9 @@ export class UpdateUser
   implements IUseCase<UpdateUserRequestDTO & IId, MessageResponseDTO>
 {
   constructor(
-    @InjectUserRepository private userRepository: UserRepositoryPort,
+    @InjectUserRepository private readonly userRepository: UserRepositoryPort,
+    @InjectWeightRepository
+    private readonly weightRepository: WeightRepositoryPort,
     private readonly utils: Utils,
   ) {
     super();
@@ -29,8 +32,29 @@ export class UpdateUser
 
     try {
       await session.withTransaction(async () => {
-        const payload: Partial<UserMongoEntity> = data;
-        result = await this.userRepository.update({ _id: data._id }, payload);
+        await this.userRepository.findOneAndThrow(
+          { username: data.username },
+          "Username telah digunakan!",
+          session,
+        );
+
+        await this.userRepository.findOneAndThrow(
+          { email: data.email },
+          "Email telah digunakan!",
+          session,
+        );
+
+        await this.weightRepository.update(
+          { username: data.username },
+          { height: data.height, age: data.age, target: data?.target },
+          session,
+        );
+
+        result = await this.userRepository.update(
+          { _id: data._id },
+          { username: data.username, email: data.email },
+          session,
+        );
       });
 
       return new MessageResponseDTO(`${result.n} documents updated`);

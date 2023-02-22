@@ -12,10 +12,11 @@ import { UserMongoEntity } from "../database/model/user.mongo-entity";
 import { InjectUserRepository } from "../database/user.repository.provider";
 import { UserRepository } from "../database/user.repository.service";
 import { CheckUsername } from "../use-cases/check-username.use-case";
+import { FindAllUser } from "../use-cases/find-all-user.use-case";
 import { FindUserById } from "../use-cases/find-user-by-id.use-case";
 import { CheckUsernameRequestDTO } from "./dtos/check-username.request.dto";
 import { UpdateUserRequestDTO } from "./dtos/update-user.request.dto";
-import { UserReponseDTO } from "./dtos/user.reponse.dto";
+import { UserResponseDTO } from "./dtos/user.response.dto";
 
 @ControllerProperty("v1/users", "[Master] Users")
 export class UsersController {
@@ -24,16 +25,13 @@ export class UsersController {
     private readonly updateUser: UpdateUser,
     private readonly findUserById: FindUserById,
     private readonly checkUsername: CheckUsername,
-    @InjectUserRepository
-    private readonly userRepository: UserRepository,
+    private readonly findAllUser: FindAllUser,
   ) {}
 
   @Get()
-  @ApiOkResponse({ type: UserReponseDTO, isArray: true })
+  @ApiOkResponse({ type: UserResponseDTO, isArray: true })
   async findAll() {
-    return (await this.userRepository.findAll()).map(
-      (user: UserMongoEntity) => new UserReponseDTO(user),
-    );
+    return this.findAllUser.execute();
   }
 
   @Get("check/:username")
@@ -44,7 +42,7 @@ export class UsersController {
 
   @SecureGet(":_id")
   @ApiBadRequestResponse({ description: "Bad Request (ID not valid)" })
-  @ApiOkResponse({ type: UserReponseDTO })
+  @ApiOkResponse({ type: UserResponseDTO })
   findOne(@Param("_id") id: string) {
     return this.findUserById.execute(id);
   }

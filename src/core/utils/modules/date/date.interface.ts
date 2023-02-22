@@ -14,4 +14,14 @@ export interface IDateUtil {
     format: string,
     date?: Date | string,
   ): string;
+  incrementDate(
+    amount: number,
+    unitOfTime: moment.unitOfTime.DurationConstructor,
+    date?: Date | string,
+  ): string;
+  decrementDate(
+    amount: number,
+    unitOfTime: moment.unitOfTime.DurationConstructor,
+    date?: Date | string,
+  ): string;
 }
