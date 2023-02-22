@@ -1,4 +1,4 @@
 export interface IWeightChartResponse {
-  label: string;
+  label: string | number;
   weight: number;
 }

@@ -58,7 +58,7 @@ export class GetUserWeightChart
       date: { $lt: new Date(startOfTime) },
     });
 
-    let previousWeight = yesterdayWeight.weight ?? 0;
+    let previousWeight = yesterdayWeight?.weight ?? 0;
 
     const results: IWeightChartResponse[] = [];
 
@@ -68,12 +68,12 @@ export class GetUserWeightChart
 
       if (indexFound < 0) {
         results.push({
-          label: this.utils.date.formatDate(tanggal, "ddd"),
+          label: +this.utils.date.formatDate(tanggal, "d"),
           weight: previousWeight,
         });
       } else {
         results.push({
-          label: this.utils.date.formatDate(tanggal, "ddd"),
+          label: +this.utils.date.formatDate(tanggal, "d"),
           weight: data[indexFound].weight,
         });
 

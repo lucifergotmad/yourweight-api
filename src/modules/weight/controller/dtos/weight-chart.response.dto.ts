@@ -17,7 +17,7 @@ export class WeightChartResponseDTO implements IWeightChartResponse {
   }
 
   @ApiProperty({ example: "Mon" })
-  label: string;
+  label: string | number;
 
   @ApiProperty({ example: 87 })
   weight: number;

@@ -54,7 +54,7 @@ export class WeightController {
 
   @SecureGet("chart")
   @APIQueryProperty(["type"])
-  @ApiOkResponse({ type: WeightChartResponseDTO })
+  @ApiOkResponse({ type: WeightChartResponseDTO, isArray: true })
   chartHandler(
     @Query() query: WeightChartRequestDTO,
     @AuthUser() user: Partial<UserMongoEntity>,

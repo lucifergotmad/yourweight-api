@@ -74,6 +74,6 @@ export class WeightCardRepository
       },
     ]);
 
-    return this.encryptor.doDecrypt(results, WeightCardIgnore);
+    return this.encryptor.doDecrypt(results, [...WeightCardIgnore, "label"]);
   }
 }
