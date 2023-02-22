@@ -12,6 +12,9 @@ import { IRepositoryResponse } from "src/core/ports/interfaces/repository-respon
 import { WeightEntity } from "src/modules/weight/domain/weight.entity";
 import { InjectWeightRepository } from "src/modules/weight/database/weight.repository.provider";
 import { WeightRepositoryPort } from "src/modules/weight/database/weight.repository.port";
+import { WeightCardRepositoryPort } from "src/modules/weight-card/database/weight-card.repository.port";
+import { InjectWeightCardRepository } from "src/modules/weight-card/database/weight-card.repository.provider";
+import { WeightCardEntity } from "src/modules/weight-card/domain/weight-card.entity";
 
 @Injectable()
 export class RegisterUser
@@ -22,6 +25,8 @@ export class RegisterUser
     @InjectUserRepository private readonly userRepository: UserRepositoryPort,
     @InjectWeightRepository
     private readonly weightRepository: WeightRepositoryPort,
+    @InjectWeightCardRepository
+    private readonly weightCardRepository: WeightCardRepositoryPort,
     private readonly utils: Utils,
   ) {
     super();
@@ -61,6 +66,14 @@ export class RegisterUser
         });
 
         await this.weightRepository.save(weightEntity, session);
+
+        const weightCardEntity = WeightCardEntity.create({
+          username: user.username,
+          date: new Date(),
+          weight: user.weight,
+        });
+
+        await this.weightCardRepository.save(weightCardEntity, session);
 
         await this.utils.nodemailer.sendVerificationEmail(
           user.username,
