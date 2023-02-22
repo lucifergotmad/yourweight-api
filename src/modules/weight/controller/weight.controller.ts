@@ -14,7 +14,7 @@ import { UserMongoEntity } from "src/modules/user/database/model/user.mongo-enti
 import { CreateWeightCard } from "src/modules/weight-card/use-cases/create-weight-card.use-case";
 import { CalculateUserBMI } from "../use-cases/calculate-user-bmi.use-case";
 import { FindWeightByUsername } from "../use-cases/find-weight-by-username.use-case";
-import { GetUserWeightChart } from "../use-cases/get-user-weight-chart.use-case";
+import { GetUserWeightChart } from "../../weight-card/use-cases/get-user-weight-chart.use-case";
 import { BMIResponseDTO } from "./dtos/bmi.response.dto";
 import { CreateWeightCardRequestDTO } from "./dtos/create-weight-card.request.dto";
 import { WeightChartRequestDTO } from "./dtos/weight-chart.request.dto";

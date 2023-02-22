@@ -6,8 +6,8 @@ import { ResponseException } from "src/core/exceptions/response.http-exception";
 import { Utils } from "src/core/utils/utils.service";
 import { WeightCardRepositoryPort } from "src/modules/weight-card/database/weight-card.repository.port";
 import { InjectWeightCardRepository } from "src/modules/weight-card/database/weight-card.repository.provider";
-import { WeightChartRequestDTO } from "../controller/dtos/weight-chart.request.dto";
-import { WeightChartResponseDTO } from "../controller/dtos/weight-chart.response.dto";
+import { WeightChartRequestDTO } from "../../weight/controller/dtos/weight-chart.request.dto";
+import { WeightChartResponseDTO } from "../../weight/controller/dtos/weight-chart.response.dto";
 
 @Injectable()
 export class GetUserWeightChart
