@@ -36,6 +36,8 @@ export class DeleteUser
       await session.withTransaction(async () => {
         const user = await this.userRepository.findById(_id, session);
 
+        await this.utils.cache.delete(user.username);
+
         await this.weightRepository.delete(
           { username: user.username },
           session,
