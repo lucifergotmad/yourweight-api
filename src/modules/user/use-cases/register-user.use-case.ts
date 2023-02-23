@@ -62,7 +62,7 @@ export class RegisterUser
           username: user.username,
           weight: user.weight,
           height: user.height,
-          age: user.height,
+          age: user.age,
         });
 
         await this.weightRepository.save(weightEntity, session);
