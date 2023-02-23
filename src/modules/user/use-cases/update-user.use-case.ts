@@ -32,18 +32,6 @@ export class UpdateUser
 
     try {
       await session.withTransaction(async () => {
-        await this.userRepository.findOneAndThrow(
-          { username: data.username },
-          "Username telah digunakan!",
-          session,
-        );
-
-        await this.userRepository.findOneAndThrow(
-          { email: data.email },
-          "Email telah digunakan!",
-          session,
-        );
-
         await this.weightRepository.update(
           { username: data.username },
           { height: data.height, age: data.age, target: data?.target },
