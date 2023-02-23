@@ -54,11 +54,6 @@ export class GetUserWeightChart
     const unitOfTime = this._generateUnitOfTime(type);
 
     const startOfTime = this.utils.date.startOf(unitOfTime, "YYYY-MM-DD");
-    const yesterdayWeight = await this.weightCardRepository.findOneLatest({
-      date: { $lt: new Date(startOfTime) },
-    });
-
-    let previousWeight = yesterdayWeight?.weight ?? 0;
 
     const results: IWeightChartResponse[] = [];
 
@@ -69,15 +64,13 @@ export class GetUserWeightChart
       if (indexFound < 0) {
         results.push({
           label: +this.utils.date.formatDate(tanggal, "d"),
-          weight: previousWeight,
+          weight: 0,
         });
       } else {
         results.push({
           label: +this.utils.date.formatDate(tanggal, "d"),
           weight: data[indexFound].weight,
         });
-
-        previousWeight = data[indexFound].weight;
       }
     }
 
