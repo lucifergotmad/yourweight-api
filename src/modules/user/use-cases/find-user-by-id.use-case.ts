@@ -21,12 +21,16 @@ export class FindUserById
     super();
   }
 
-  public async execute(user_id: string): Promise<UserResponseDTO> {
+  public async execute(_id: string): Promise<UserResponseDTO> {
     try {
-      const user = await this.userRepository.findById(user_id);
+      const user = await this.userRepository.findOneOrThrow(
+        { _id },
+        "User cannot be found!",
+      );
+
       const data = await this.weightRepository.findOneOrThrow(
         { username: user.username },
-        "Username tidak ditemukan!",
+        "User cannot be found!",
       );
 
       return new UserResponseDTO({

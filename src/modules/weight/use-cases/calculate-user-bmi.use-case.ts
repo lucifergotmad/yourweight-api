@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { BaseUseCase } from "src/core/base-classes/infra/use-case.base";
 import { IUseCase } from "src/core/base-classes/interfaces/use-case.interface";
 import { BMI } from "src/core/constants/app/bmi.const";
@@ -21,11 +21,15 @@ export class CalculateUserBMI
 
   public async execute(): Promise<BMIResponseDTO> {
     try {
-      const { weight, height } = await this.weightRepository.findOneLatest({
+      if (!this.user.username) {
+        throw new UnauthorizedException("User is not valid!");
+      }
+
+      const data = await this.weightRepository.findOneLatest({
         username: this.user.username,
       });
 
-      const calculatedWeight = this.calculate(weight, height);
+      const calculatedWeight = this.calculate(data?.weight, data?.height);
       const description = this.defineBMI(calculatedWeight);
 
       return new BMIResponseDTO({ description, index: calculatedWeight });
@@ -35,7 +39,7 @@ export class CalculateUserBMI
   }
 
   private calculate(weight: number, height: number): number {
-    return +(weight / ((height / 100) * 2)).toFixed(1);
+    return weight && height ? +(weight / ((height / 100) * 2)).toFixed(1) : 0;
   }
 
   private defineBMI(calculatedWeight: number): string {
