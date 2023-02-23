@@ -14,6 +14,7 @@ export class UserResponseDTO extends IdResponseDTO implements IUserResponse {
   constructor(props: IUserResponse) {
     super(props._id);
     this.username = props.username;
+    this.email = props.email;
     this.weight = props.weight;
     this.height = props.height;
     this.age = props.age;
@@ -22,6 +23,9 @@ export class UserResponseDTO extends IdResponseDTO implements IUserResponse {
 
   @ApiProperty({ example: "lucifer" })
   username: string;
+
+  @ApiProperty({ example: "lucifer@gmail.com" })
+  email: string;
 
   @ApiProperty({ example: 87 })
   weight: number;

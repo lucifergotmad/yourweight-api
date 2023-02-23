@@ -31,6 +31,7 @@ export class FindUserById
 
       return new UserResponseDTO({
         _id: user._id,
+        email: user.email,
         username: data.username,
         age: data.age,
         height: data.height,

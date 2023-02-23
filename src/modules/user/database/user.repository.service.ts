@@ -47,6 +47,7 @@ export class UserRepository
           $project: {
             _id: "$_id",
             username: "$username",
+            email: "$email",
             weight: "$weights.weight",
             height: "$weights.height",
             age: "$weights.age",
