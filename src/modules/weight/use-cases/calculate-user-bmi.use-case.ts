@@ -35,7 +35,7 @@ export class CalculateUserBMI
   }
 
   private calculate(weight: number, height: number): number {
-    return +(weight / height).toFixed(1);
+    return +(weight / ((height / 100) * 2)).toFixed(1);
   }
 
   private defineBMI(calculatedWeight: number): string {
